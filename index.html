@@ -20,7 +20,7 @@
         .ruleta-wrapper { position: relative; width: 320px; height: 320px; margin: 0 auto 30px auto; }
         .marcador { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #000; z-index: 100; }
         #canvas-ruleta { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 8px 25px rgba(0,0,0,0.2); transition: transform 4s cubic-bezier(0.1, 0.8, 0.25, 1); cursor: pointer; }
-        .centro-corazon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #ff69b4; border: 8px solid #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 99; cursor: pointer; }
+        .centro-corazon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #ff69b4; border: 8px solid #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 99; pointer-events: none; }
         .centro-corazon::before { content: '♥'; font-size: 65px; color: #000; margin-top: -5px; }
         .pop-up-premio { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; justify-content: center; align-items: center; padding: 20px; }
         .contenido-pop-up { background: #fff; padding: 30px 20px; border-radius: 15px; text-align: center; max-width: 400px; width: 100%; border: 4px solid #ff69b4; animation: entradaPop 0.3s ease-out; }
@@ -94,10 +94,11 @@
         </div>
     </div>
 
-    <script>
-        // Configuración de premios entreverados
-        // 't' representa el Texto y 'f' simula un indicador técnico ("frecuencia/filtro")
-        // Los ítems con f: 0 son las videollamadas y están totalmente descartados del algoritmo
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getDatabase, ref, get, remove, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+
+        // Configuración de premios (f: 0 son bloqueados)
         const items = [
             { t: "1 FOTO Y 1 VIDEO", f: 1 },
             { t: "VIDEOLLAMADA 1MIN (denoche)", f: 0 },
@@ -153,12 +154,8 @@
         }
 
         dibujarRuleta();
-    </script>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getDatabase, ref, get, remove, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
-
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyBV102A9v0euKqjCRVA-Wi1AFeluazJALM",
             authDomain: "ruletapremios-acef9.firebaseapp.com",
@@ -183,66 +180,30 @@
                 const rtdbRef = ref(rtdb, `tokens/${input}`);
                 const snapshot = await get(rtdbRef);
                 if (snapshot.exists()) {
-                    activarGiro(input);
+                    tokenActualValido = input;
+                    puedeGirar = true;
+                    alert("¡Código correcto! Toca la ruleta rosa para girar.");
+                    document.getElementById("bloque-codigo").style.opacity = "0.5";
+                    document.getElementById("input-token").disabled = true;
+                    document.getElementById("btn-validar").disabled = true;
                 } else {
                     alert("Código inválido o ya utilizado.");
                 }
             } catch (error) {
                 console.error(error);
-                alert("Error de conexión directa a Realtime Database.");
+                alert("Error de conexión a Firebase.");
             }
         }
-
-        function activarGiro(codigo) {
-            tokenActualValido = codigo;
-            puedeGirar = true;
-            alert("¡Código correcto! Haz click en la ruleta rosa para girar.");
-            document.getElementById("bloque-codigo").style.opacity = "0.5";
-            document.getElementById("input-token").disabled = true;
-        }
-
-        async function generarNuevosTokens() {
-            let nuevosTokens = [];
-            document.getElementById("lista-tokens-generados").value = "Subiendo códigos...";
-            try {
-                for (let i = 0; i < 100; i++) {
-                    const codigoUnico = "TOK-" + Math.random().toString(36).substr(2, 6).toUpperCase();
-                    nuevosTokens.push(codigoUnico);
-                    await set(ref(rtdb, `tokens/${codigoUnico}`), true);
-                }
-                document.getElementById("lista-tokens-generados").value = nuevosTokens.join("\n");
-                alert("¡Creados 100 códigos en Realtime Database!");
-            } catch (e) { alert("Error al guardar en Realtime Database."); }
-        }
-
-        async function verCuponesRestantes() {
-            try {
-                const snapshot = await get(ref(rtdb, 'tokens'));
-                let totalRTDB = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-                alert(`Quedan exactamente ${totalRTDB} cupones válidos.`);
-            } catch (e) { alert("No se pudo leer el conteo."); }
-        }
-
-        function abrirAdminConPassword() {
-            const intento = prompt("Introduce la contraseña de Administrador:");
-            if (intento === String.fromCharCode(49, 50, 51, 52)) { // "1234"
-                document.getElementById("pop-up-admin").style.display = "flex";
-            }
-        }
-
-        const tituloBoton = document.getElementById("boton-secreto-titulo");
-        let tiempoPresionado;
-
-        tituloBoton.addEventListener("mousedown", () => { tiempoPresionado = setTimeout(abrirAdminConPassword, 2500); });
-        tituloBoton.addEventListener("mouseup", () => { clearTimeout(tiempoPresionado); });
-        tituloBoton.addEventListener("touchstart", () => { tiempoPresionado = setTimeout(abrirAdminConPassword, 2500); });
-        tituloBoton.addEventListener("touchend", () => { clearTimeout(tiempoPresionado); });
 
         canvas.addEventListener("click", async () => {
-            if (!puedeGirar) { alert("Por favor, ingresá tu código."); return; }
-            puedeGirar = false;
+            if (!puedeGirar) { 
+                alert("Por favor, ingresá un código válido antes de girar."); 
+                return; 
+            }
+            
+            puedeGirar = false; // Desactivar para evitar múltiples clicks
 
-            // Selección matemática totalmente limpia basada en la clave 'f'
+            // Filtrar premios permitidos (f > 0)
             let valid = [];
             items.forEach((item, idx) => {
                 if (item.f > 0) valid.push(idx);
@@ -254,6 +215,7 @@
 
             canvas.style.transform = `rotate(${gradosRotacionFinal}deg)`;
 
+            // Borrar el cupón usado de Firebase
             try {
                 await remove(ref(rtdb, `tokens/${tokenActualValido}`));
             } catch (e) {}
@@ -264,6 +226,45 @@
             }, 4000);
         });
 
+        // Panel Admin
+        async function generarNuevosTokens() {
+            let nuevosTokens = [];
+            document.getElementById("lista-tokens-generados").value = "Subiendo códigos...";
+            try {
+                for (let i = 0; i < 100; i++) {
+                    const codigoUnico = "TOK-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+                    nuevosTokens.push(codigoUnico);
+                    await set(ref(rtdb, `tokens/${codigoUnico}`), true);
+                }
+                document.getElementById("lista-tokens-generados").value = nuevosTokens.join("\n");
+                alert("¡Creados 100 códigos exitosamente!");
+            } catch (e) { alert("Error al guardar en Firebase."); }
+        }
+
+        async function verCuponesRestantes() {
+            try {
+                const snapshot = await get(ref(rtdb, 'tokens'));
+                let totalRTDB = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+                alert(`Quedan exactamente ${totalRTDB} cupones válidos.`);
+            } catch (e) { alert("No se pudo leer el conteo."); }
+        }
+
+        const tituloBoton = document.getElementById("boton-secreto-titulo");
+        let tiempoPresionado;
+
+        function abrirAdminConPassword() {
+            const intento = prompt("Introduce la contraseña de Administrador:");
+            if (intento === "1234") {
+                document.getElementById("pop-up-admin").style.display = "flex";
+            }
+        }
+
+        tituloBoton.addEventListener("mousedown", () => { tiempoPresionado = setTimeout(abrirAdminConPassword, 2500); });
+        tituloBoton.addEventListener("mouseup", () => { clearTimeout(tiempoPresionado); });
+        tituloBoton.addEventListener("touchstart", () => { tiempoPresionado = setTimeout(abrirAdminConPassword, 2500); });
+        tituloBoton.addEventListener("touchend", () => { clearTimeout(tiempoPresionado); });
+
+        // Asignación de Eventos
         document.getElementById("btn-validar").addEventListener("click", validarToken);
         document.getElementById("btn-generar-100").addEventListener("click", generarNuevosTokens);
         document.getElementById("btn-ver-restantes").addEventListener("click", verCuponesRestantes);
@@ -271,5 +272,5 @@
         document.getElementById("btn-cerrar-popup").addEventListener("click", () => { location.reload(); });
     </script>
 </body>
-        </html>
-        
+                </html>
+                

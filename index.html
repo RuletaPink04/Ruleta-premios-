@@ -20,17 +20,17 @@
         .ruleta-wrapper { position: relative; width: 320px; height: 320px; margin: 0 auto 30px auto; }
         .marcador { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #000; z-index: 100; }
         #canvas-ruleta { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 8px 25px rgba(0,0,0,0.2); transition: transform 4s cubic-bezier(0.1, 0.8, 0.25, 1); cursor: pointer; }
-        .centro-corazon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #ff69b4; border: 8px solid #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; pointer-events: none; z-index: 50; }
+        .centro-corazon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #ff69b4; border: 8px solid #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 99; cursor: pointer; }
         .centro-corazon::before { content: '♥'; font-size: 65px; color: #000; margin-top: -5px; }
         .pop-up-premio { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; justify-content: center; align-items: center; padding: 20px; }
         .contenido-pop-up { background: #fff; padding: 30px 20px; border-radius: 15px; text-align: center; max-width: 400px; width: 100%; border: 4px solid #ff69b4; animation: entradaPop 0.3s ease-out; }
         @keyframes entradaPop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .contenido-pop-up h2 { color: #ff69b4; font-size: 28px; margin-bottom: 10px; }
-        .contenido-pop-up p { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+        .contenido-pop-up h2 { color: #ff69b4; font-size: 20px; margin-bottom: 10px; }
+        .contenido-pop-up p { font-size: 12px; font-weight: 700; margin-bottom: 20px; }
         .contenido-pop-up button { background: #000; color: #fff; padding: 10px 25px; border: none; border-radius: 25px; font-weight: 700; cursor: pointer; }
         .pie-pagina { font-size: 12px; font-weight: 700; color: #666; letter-spacing: 0.5px; line-height: 1.6; text-transform: uppercase; }
         .usuario-telegram { color: #000; font-size: 14px; display: block; margin-top: 2px; font-weight: 900; letter-spacing: 1px; }
-        .contenedor-logo-telegram { margin-top: 8px; display: flex; justify-content: center; align-items: center; }
+        .contenedor-logo-telegram { margin-top: 0px; display: flex; justify-content: center; align-items: center; }
         .logo-telegram { width: 28px; height: 28px; }
         .panel-admin-contenido { background: #111; color: #fff; border: 3px solid #ff69b4; max-width: 450px; width: 100%; padding: 25px; border-radius: 15px; text-align: left; }
         .panel-admin-contenido h3 { color: #ff69b4; margin-bottom: 15px; font-size: 20px; text-transform: uppercase; }
@@ -50,7 +50,7 @@
         <p class="subtitulo">Girá la ruleta para descubrir tu premio sorpresa</p>
 
         <div class="seccion-token" id="bloque-codigo">
-            <p style="font-size: 12px; font-weight:700; margin-bottom: 8px; text-transform:uppercase;">Ingresa tu código de un solo uso:</p>
+            <p style="font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">Ingresa tu código de un solo uso:</p>
             <input type="text" id="input-token" placeholder="CODIGO-XXXX">
             <button id="btn-validar">Validar</button>
         </div>
@@ -62,13 +62,14 @@
         </div>
 
         <p class="pie-pagina">
-            Enviame la Captura del Premio a<br>
+            Enviame la Captura del Premio a:<br>
             <span class="usuario-telegram">@Pinklady_04</span>
         </p>
+
         <div class="contenedor-logo-telegram">
             <svg class="logo-telegram" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="12" fill="#0088CC"/>
-                <path d="M16.56 8.16L6.59 12.01C5.91 12.28 5.91 12.66 6.47 12.83L9.03 13.63L14.95 9.89C15.23 9.72 15.48 9.81 15.27 10L10.48 14.33L10.3 16.89C10.55 16.89 10.66 16.78 10.8 16.64L12.01 15.47L14.52 17.32C14.98 17.58 15.31 17.44 15.43 16.89L17.08 9.12C17.25 8.44 16.82 8.13 16.56 8.16Z" fill="white"/>
+                <path d="M16.56 8.16L6.59 12.01C5.91 12.28 5.91 12.66 6.47 12.83L9.03 13.63L14.95 9.89C15.23 9.72 15.48 9.81 15.27 10L10.48 14.33L10.3 16.89C10.55 16.89 10.66 16.78 10.8 16.64L12.01 15.47L14.52 17.32C14.98 17.58 15.31 17.44 15.43 16.89L17.08 9.12C17.24 8.48 16.84 8.19 16.56 8.16Z" fill="white"/>
             </svg>
         </div>
     </div>
@@ -77,15 +78,15 @@
         <div class="contenido-pop-up">
             <h2>¡Felicidades!</h2>
             <p>Ganaste: <br><span id="texto-premio" style="color:#000; font-size:22px;"></span></p>
-            <p style="font-size: 12px; color: #777;">Recordá sacar una captura de pantalla completa ahora mismo.</p>
-            <button id="btn-cerrar-popup">Genial</button>
+            <p style="font-size: 12px; color: #777;">*Recordá sacar una captura de pantalla completa ahora mismo.*</p>
+            <button id="btn-cerrar-popup">¡Genial!</button>
         </div>
     </div>
 
     <div class="pop-up-premio" id="pop-up-admin">
         <div class="panel-admin-contenido">
             <h3>Panel de Control Secreto</h3>
-            <p style="font-size:12px; color:#bbb;">Los códigos generados aquí se subirán directamente a tu Firebase.</p>
+            <p style="font-size: 12px; color: #bbb;">*Los códigos generados aquí se subirán directamente a tu Firebase.*</p>
             <textarea id="lista-tokens-generados" readonly placeholder="Los códigos nuevos aparecerán aquí..."></textarea>
             <button class="btn-admin" id="btn-generar-100">Generar 100 códigos nuevos en Firebase</button>
             <button class="btn-admin" style="background:#555; color:#fff;" id="btn-ver-restantes">Ver cuántos cupones quedan activos</button>
@@ -95,13 +96,25 @@
 
     <script>
         const premios = [
-            "10MIN SEXTING (denoche)", "5MIN SEXTING (denoche)", "VIDEOLLAMADA 1MIN (denoche)", 
-            "VIDEOLLAMADA 2MIN (denoche)", "VIDEOLLAMADA 5MIN (denoche)", "DICKRATE CON FOTITO DE REGALO",  
-            "1 DIA EN EL VIP", "3 DIAS EN EL VIP", "7 DIAS EN EL VIP", "15 DIAS EN EL VIP", 
-            "UN MES EN EL VIP", "1 FOTO Y 1 VIDEO", "5 FOTOS Y 3 VIDEOS", "10 FOTOS Y 6 VIDEOS", 
-            "VALE OTRA TIRADA", "ENCUENTRO 30MIN", "ENCUENTRO 1 HORA", "ENCUENTRO TRIO CON MI PAREJA", 
-            "3 FOTOS ZINGS", "5 FOTOS Y 2 VIDEOS ZINGS"
+            "10MIN SEXTING (denoche)",
+            "5MIN SEXTING (denoche)",
+            "VIDEOLLAMADA 1MIN (denoche)",
+            "VIDEOLLAMADA 2MIN (denoche)",
+            "VIDEOLLAMADA 5MIN (denoche)",
+            "DICKRATE CON FOTITO DE REGALO",
+            "1 DIA EN EL VIP",
+            "3 DIAS EN EL VIP",
+            "7 DIAS EN EL VIP",
+            "15 DIAS EN EL VIP",
+            "UN MES EN EL VIP",
+            "1 FOTO Y 1 VIDEO",
+            "5 FOTOS Y 3 VIDEOS",
+            "10 FOTOS Y 6 VIDEOS",
+            "VALE OTRA TIRADA",
+            "3 FOTOS ZINGS",
+            "5 FOTOS Y 2 VIDEOS ZINGS"
         ];
+
         const totalPremios = premios.length;
         const canvas = document.getElementById("canvas-ruleta");
         const ctx = canvas.getContext("2d");
@@ -132,6 +145,7 @@
                 ctx.restore();
             }
         }
+
         dibujarRuleta();
     </script>
 
@@ -140,19 +154,19 @@
         import { getDatabase, ref, get, remove, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyBVI02A9vOeuKqjCRVA-WiIAFeluazJALM",
+            apiKey: "AIzaSyBV102A9v0euKqjCRVA-Wi1AFeluazJALM",
             authDomain: "ruletapremios-acef9.firebaseapp.com",
             databaseURL: "https://ruletapremios-acef9-default-rtdb.firebaseio.com",
             projectId: "ruletapremios-acef9",
             storageBucket: "ruletapremios-acef9.firebasestorage.app",
             messagingSenderId: "1023792024330",
-            appId: "1:1023792024330:web:e6eb093cd009cc3ff388f3"
+            appId: "1:1023792024330:web:e6eb053cd09cc3fF388F3"
         };
 
         const app = initializeApp(firebaseConfig);
         const rtdb = getDatabase(app);
 
-        let puedeGirar = false; 
+        let puedeGirar = false;
         let tokenActualValido = "";
 
         async function validarToken() {
@@ -162,8 +176,8 @@
             try {
                 const rtdbRef = ref(rtdb, `tokens/${input}`);
                 const snapshot = await get(rtdbRef);
-                if (snapshot.exists()) { 
-                    activarGiro(input); 
+                if (snapshot.exists()) {
+                    activarGiro(input);
                 } else {
                     alert("Código inválido o ya utilizado.");
                 }
@@ -197,21 +211,22 @@
 
         async function verCuponesRestantes() {
             try {
-                const snapshot = await get(ref(rtdb, "tokens"));
+                const snapshot = await get(ref(rtdb, 'tokens'));
                 let totalRTDB = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
                 alert(`Quedan exactamente ${totalRTDB} cupones válidos.`);
             } catch (e) { alert("No se pudo leer el conteo."); }
         }
 
         function abrirAdminConPassword() {
-            const intento = prompt("Introduce la contraseña de Administrator:");
-            if (intento === String.fromCharCode(49, 50, 51, 52)) {
+            const intento = prompt("Introduce la contraseña de Administrador:");
+            if (intento === String.fromCharCode(49, 50, 51, 52)) { // "1234"
                 document.getElementById("pop-up-admin").style.display = "flex";
             }
         }
 
         const tituloBoton = document.getElementById("boton-secreto-titulo");
         let tiempoPresionado;
+
         tituloBoton.addEventListener("mousedown", () => { tiempoPresionado = setTimeout(abrirAdminConPassword, 2500); });
         tituloBoton.addEventListener("mouseup", () => { clearTimeout(tiempoPresionado); });
         tituloBoton.addEventListener("touchstart", () => { tiempoPresionado = setTimeout(abrirAdminConPassword, 2500); });
@@ -221,18 +236,12 @@
             if (!puedeGirar) { alert("Por favor, ingresá tu código."); return; }
             puedeGirar = false;
 
+            // BLOQUEO DE SEGURIDAD:
+            // Solo agrega a la lista de posibles ganadores los índices
+            // de premios que NO contengan la palabra "VIDEOLLAMADA"
             let indicesPermitidos = [];
-            
-            // Camuflaje matemático de los premios bloqueados (2, 3, 4, 15, 16, 17)
-            const c1 = (1 * 2);
-            const c2 = (6 - 3);
-            const c3 = (8 / 2);
-            const c4 = (3 * 5); 
-            const c5 = (4 * 4); 
-            const c6 = (9 + 8); 
-
             for (let i = 0; i < totalPremios; i++) {
-                if (i !== c1 && i !== c2 && i !== c3 && i !== c4 && i !== c5 && i !== c6) {
+                if (!premios[i].toUpperCase().includes("VIDEOLLAMADA")) {
                     indicesPermitidos.push(i);
                 }
             }
@@ -260,5 +269,4 @@
         document.getElementById("btn-cerrar-popup").addEventListener("click", () => { location.reload(); });
     </script>
 </body>
-            </html>
-            
+</html>

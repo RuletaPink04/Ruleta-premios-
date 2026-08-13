@@ -95,6 +95,7 @@
     </div>
 
     <script>
+        // Lista de premios incluyendo los 3 nuevos de Mejores Amigos
         const premios = [
             "10MIN SEXTING (denoche)",
             "5MIN SEXTING (denoche)",
@@ -107,6 +108,9 @@
             "7 DIAS EN EL VIP",
             "15 DIAS EN EL VIP",
             "UN MES EN EL VIP",
+            "MEJORES AMIGOS SEMANAL",
+            "MEJORES AMIGOS QUINCENA",
+            "MEJORES AMIGOS MENSUAL",
             "1 FOTO Y 1 VIDEO",
             "5 FOTOS Y 3 VIDEOS",
             "10 FOTOS Y 6 VIDEOS",
@@ -138,10 +142,10 @@
                 ctx.rotate(anguloInicio + anguloSector / 2);
                 ctx.textAlign = "right";
                 ctx.fillStyle = (i % 2 === 0) ? "#ff69b4" : "#000000";
-                ctx.font = "bold 10px Montserrat";
+                ctx.font = "bold 9px Montserrat";
                 let textoMostrar = premios[i];
                 if(textoMostrar.length > 18) textoMostrar = textoMostrar.substring(0,16) + "..";
-                ctx.fillText(textoMostrar, 230, 5);
+                ctx.fillText(textoMostrar, 230, 4);
                 ctx.restore();
             }
         }
@@ -236,9 +240,7 @@
             if (!puedeGirar) { alert("Por favor, ingresá tu código."); return; }
             puedeGirar = false;
 
-            // BLOQUEO DE SEGURIDAD:
-            // Solo agrega a la lista de posibles ganadores los índices
-            // de premios que NO contengan la palabra "VIDEOLLAMADA"
+            // BLOQUEO: Solo los elementos que NO contengan la palabra "VIDEOLLAMADA" entran en el sorteo
             let indicesPermitidos = [];
             for (let i = 0; i < totalPremios; i++) {
                 if (!premios[i].toUpperCase().includes("VIDEOLLAMADA")) {

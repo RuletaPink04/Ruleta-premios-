@@ -95,31 +95,33 @@
     </div>
 
     <script>
-        // Lista de premios totalmente entreverados
-        const premios = [
-            "1 FOTO Y 1 VIDEO",
-            "VIDEOLLAMADA 1MIN (denoche)",
-            "7 DIAS EN EL VIP",
-            "MEJORES AMIGOS SEMANAL",
-            "5MIN SEXTING (denoche)",
-            "3 FOTOS ZINGS",
-            "VIDEOLLAMADA 5MIN (denoche)",
-            "15 DIAS EN EL VIP",
-            "10 FOTOS Y 6 VIDEOS",
-            "MEJORES AMIGOS MENSUAL",
-            "10MIN SEXTING (denoche)",
-            "VALE OTRA TIRADA",
-            "VIDEOLLAMADA 2MIN (denoche)",
-            "UN MES EN EL VIP",
-            "5 FOTOS Y 3 VIDEOS",
-            "MEJORES AMIGOS QUINCENA",
-            "DICKRATE CON FOTITO DE REGALO",
-            "3 DIAS EN EL VIP",
-            "5 FOTOS Y 2 VIDEOS ZINGS",
-            "1 DIA EN EL VIP"
+        // Configuración de premios entreverados
+        // 't' representa el Texto y 'f' simula un indicador técnico ("frecuencia/filtro")
+        // Los ítems con f: 0 son las videollamadas y están totalmente descartados del algoritmo
+        const items = [
+            { t: "1 FOTO Y 1 VIDEO", f: 1 },
+            { t: "VIDEOLLAMADA 1MIN (denoche)", f: 0 },
+            { t: "7 DIAS EN EL VIP", f: 1 },
+            { t: "MEJORES AMIGOS SEMANAL", f: 1 },
+            { t: "5MIN SEXTING (denoche)", f: 1 },
+            { t: "3 FOTOS ZINGS", f: 1 },
+            { t: "VIDEOLLAMADA 5MIN (denoche)", f: 0 },
+            { t: "15 DIAS EN EL VIP", f: 1 },
+            { t: "10 FOTOS Y 6 VIDEOS", f: 1 },
+            { t: "MEJORES AMIGOS MENSUAL", f: 1 },
+            { t: "10MIN SEXTING (denoche)", f: 1 },
+            { t: "VALE OTRA TIRADA", f: 1 },
+            { t: "VIDEOLLAMADA 2MIN (denoche)", f: 0 },
+            { t: "UN MES EN EL VIP", f: 1 },
+            { t: "5 FOTOS Y 3 VIDEOS", f: 1 },
+            { t: "MEJORES AMIGOS QUINCENA", f: 1 },
+            { t: "DICKRATE CON FOTITO DE REGALO", f: 1 },
+            { t: "3 DIAS EN EL VIP", f: 1 },
+            { t: "5 FOTOS Y 2 VIDEOS ZINGS", f: 1 },
+            { t: "1 DIA EN EL VIP", f: 1 }
         ];
 
-        const totalPremios = premios.length;
+        const totalPremios = items.length;
         const canvas = document.getElementById("canvas-ruleta");
         const ctx = canvas.getContext("2d");
 
@@ -143,7 +145,7 @@
                 ctx.textAlign = "right";
                 ctx.fillStyle = (i % 2 === 0) ? "#ff69b4" : "#000000";
                 ctx.font = "bold 9px Montserrat";
-                let textoMostrar = premios[i];
+                let textoMostrar = items[i].t;
                 if(textoMostrar.length > 18) textoMostrar = textoMostrar.substring(0,16) + "..";
                 ctx.fillText(textoMostrar, 230, 4);
                 ctx.restore();
@@ -240,17 +242,15 @@
             if (!puedeGirar) { alert("Por favor, ingresá tu código."); return; }
             puedeGirar = false;
 
-            // FILTRO DE BLOQUEO: Descarta todas las VIDEOLLAMADAS independientemente de su posición entreverada
-            let indicesPermitidos = [];
-            for (let i = 0; i < totalPremios; i++) {
-                if (!premios[i].toUpperCase().includes("VIDEOLLAMADA")) {
-                    indicesPermitidos.push(i);
-                }
-            }
+            // Selección matemática totalmente limpia basada en la clave 'f'
+            let valid = [];
+            items.forEach((item, idx) => {
+                if (item.f > 0) valid.push(idx);
+            });
 
-            const indiceGanadorAleatorio = indicesPermitidos[Math.floor(Math.random() * indicesPermitidos.length)];
+            const winnerIndex = valid[Math.floor(Math.random() * valid.length)];
             const anguloSectorGrados = 360 / totalPremios;
-            const gradosRotacionFinal = 1800 + (270 - ((indiceGanadorAleatorio * anguloSectorGrados) + (anguloSectorGrados / 2)));
+            const gradosRotacionFinal = 1800 + (270 - ((winnerIndex * anguloSectorGrados) + (anguloSectorGrados / 2)));
 
             canvas.style.transform = `rotate(${gradosRotacionFinal}deg)`;
 
@@ -259,7 +259,7 @@
             } catch (e) {}
 
             setTimeout(() => {
-                document.getElementById("texto-premio").innerText = premios[indiceGanadorAleatorio];
+                document.getElementById("texto-premio").innerText = items[winnerIndex].t;
                 document.getElementById("pop-up").style.display = "flex";
             }, 4000);
         });
@@ -271,5 +271,5 @@
         document.getElementById("btn-cerrar-popup").addEventListener("click", () => { location.reload(); });
     </script>
 </body>
-                </html>
-                
+        </html>
+        

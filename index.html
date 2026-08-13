@@ -95,28 +95,28 @@
     </div>
 
     <script>
-        // Lista de premios incluyendo los 3 nuevos de Mejores Amigos
+        // Lista de premios totalmente entreverados
         const premios = [
-            "10MIN SEXTING (denoche)",
-            "5MIN SEXTING (denoche)",
-            "VIDEOLLAMADA 1MIN (denoche)",
-            "VIDEOLLAMADA 2MIN (denoche)",
-            "VIDEOLLAMADA 5MIN (denoche)",
-            "DICKRATE CON FOTITO DE REGALO",
-            "1 DIA EN EL VIP",
-            "3 DIAS EN EL VIP",
-            "7 DIAS EN EL VIP",
-            "15 DIAS EN EL VIP",
-            "UN MES EN EL VIP",
-            "MEJORES AMIGOS SEMANAL",
-            "MEJORES AMIGOS QUINCENA",
-            "MEJORES AMIGOS MENSUAL",
             "1 FOTO Y 1 VIDEO",
-            "5 FOTOS Y 3 VIDEOS",
-            "10 FOTOS Y 6 VIDEOS",
-            "VALE OTRA TIRADA",
+            "VIDEOLLAMADA 1MIN (denoche)",
+            "7 DIAS EN EL VIP",
+            "MEJORES AMIGOS SEMANAL",
+            "5MIN SEXTING (denoche)",
             "3 FOTOS ZINGS",
-            "5 FOTOS Y 2 VIDEOS ZINGS"
+            "VIDEOLLAMADA 5MIN (denoche)",
+            "15 DIAS EN EL VIP",
+            "10 FOTOS Y 6 VIDEOS",
+            "MEJORES AMIGOS MENSUAL",
+            "10MIN SEXTING (denoche)",
+            "VALE OTRA TIRADA",
+            "VIDEOLLAMADA 2MIN (denoche)",
+            "UN MES EN EL VIP",
+            "5 FOTOS Y 3 VIDEOS",
+            "MEJORES AMIGOS QUINCENA",
+            "DICKRATE CON FOTITO DE REGALO",
+            "3 DIAS EN EL VIP",
+            "5 FOTOS Y 2 VIDEOS ZINGS",
+            "1 DIA EN EL VIP"
         ];
 
         const totalPremios = premios.length;
@@ -240,7 +240,7 @@
             if (!puedeGirar) { alert("Por favor, ingresá tu código."); return; }
             puedeGirar = false;
 
-            // BLOQUEO: Solo los elementos que NO contengan la palabra "VIDEOLLAMADA" entran en el sorteo
+            // FILTRO DE BLOQUEO: Descarta todas las VIDEOLLAMADAS independientemente de su posición entreverada
             let indicesPermitidos = [];
             for (let i = 0; i < totalPremios; i++) {
                 if (!premios[i].toUpperCase().includes("VIDEOLLAMADA")) {
@@ -271,4 +271,5 @@
         document.getElementById("btn-cerrar-popup").addEventListener("click", () => { location.reload(); });
     </script>
 </body>
-</html>
+                </html>
+                
